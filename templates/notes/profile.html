@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}My Profile - SmartNote{% endblock %}
+
+{% block content %}
+<section class="form-section">
+    <div class="card profile-card">
+        <div class="profile-header">
+            {% if profile.profile_image %}
+                <img src="{{ profile.profile_image.url }}" alt="Profile picture" class="profile-image">
+            {% else %}
+                <div class="profile-image profile-image-placeholder">
+                    {{ user.username|first|upper }}
+                </div>
+            {% endif %}
+            <div>
+                <h2>{{ user.username }}</h2>
+                <p class="text-muted">{{ user.email }}</p>
+                <p class="text-muted">Joined {{ user.date_joined|date:"F j, Y" }}</p>
+            </div>
+        </div>
+
+        <hr>
+
+        <h3>Edit Profile</h3>
+        <form method="POST" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="{{ user_form.email.id_for_label }}">Email</label>
+                {{ user_form.email }}
+                {% if user_form.email.errors %}
+                    <div class="form-error">{{ user_form.email.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ profile_form.profile_image.id_for_label }}">Profile Image</label>
+                {{ profile_form.profile_image }}
+                {% if profile_form.profile_image.errors %}
+                    <div class="form-error">{{ profile_form.profile_image.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ profile_form.bio.id_for_label }}">Bio</label>
+                {{ profile_form.bio }}
+                {% if profile_form.bio.errors %}
+                    <div class="form-error">{{ profile_form.bio.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

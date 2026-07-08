@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}My Notes - SmartNote{% endblock %}
+
+{% block content %}
+<section class="notes-section">
+    <div class="notes-header">
+        <h2>My Notes</h2>
+        <a href="{% url 'note_create' %}" class="btn btn-primary">+ New Note</a>
+    </div>
+
+    <div class="card search-card">
+        <form method="GET" class="search-form">
+            <input
+                type="text"
+                name="q"
+                class="form-control"
+                placeholder="Search by title or content..."
+                value="{{ query }}">
+            <button type="submit" class="btn btn-primary">Search</button>
+            {% if query %}
+                <a href="{% url 'note_list' %}" class="btn btn-secondary">Clear</a>
+            {% endif %}
+        </form>
+    </div>
+
+    {% if query %}
+        <p class="text-muted">Showing results for "<strong>{{ query }}</strong>"</p>
+    {% endif %}
+
+    {% if notes %}
+        <div class="notes-grid">
+            {% for note in notes %}
+                <div class="note-card card">
+                    <h3 class="note-card-title">{{ note.title }}</h3>
+                    <p class="note-card-content">{{ note.short_content }}</p>
+                    <div class="note-card-dates">
+                        <span>Created: {{ note.created_at|date:"M d, Y" }}</span>
+                        <span>Updated: {{ note.updated_at|date:"M d, Y" }}</span>
+                    </div>
+                    <div class="note-card-actions">
+                        <a href="{% url 'note_detail' note.pk %}" class="btn btn-sm btn-secondary">View</a>
+                        <a href="{% url 'note_edit' note.pk %}" class="btn btn-sm btn-secondary">Edit</a>
+                        <a href="{% url 'note_delete' note.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="card empty-state">
+            <p>No notes found{% if query %} for "{{ query }}"{% endif %}.</p>
+            <a href="{% url 'note_create' %}" class="btn btn-primary">Create your first note</a>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}SmartNote - Simple Note Taking{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-card">
+        <h1 class="hero-title">SmartNote</h1>
+        <p class="hero-subtitle">
+            A simple, clean, and modern place to capture your thoughts,
+            ideas, and to-dos — all in one personal space.
+        </p>
+        <div class="hero-actions">
+            <a href="{% url 'register' %}" class="btn btn-primary">Register</a>
+            <a href="{% url 'login' %}" class="btn btn-secondary">Login</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

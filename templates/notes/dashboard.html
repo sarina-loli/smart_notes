@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - SmartNote{% endblock %}
+
+{% block content %}
+<section class="dashboard">
+    <div class="dashboard-header card">
+        <div class="dashboard-header-info">
+            <h2>Welcome, {{ user.username }} 👋</h2>
+            <p class="text-muted">
+                {% if profile.bio %}{{ profile.bio }}{% else %}You have {{ notes_count }} note{{ notes_count|pluralize }} saved.{% endif %}
+            </p>
+        </div>
+        {% if profile.profile_image %}
+            <img src="{{ profile.profile_image.url }}" alt="Profile picture" class="dashboard-avatar">
+        {% else %}
+            <div class="dashboard-avatar dashboard-avatar-placeholder">
+                {{ user.username|first|upper }}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="dashboard-actions">
+        <a href="{% url 'note_create' %}" class="btn btn-primary">+ Start Taking Note</a>
+        <a href="{% url 'note_list' %}" class="btn btn-secondary">View Notes</a>
+    </div>
+
+    <div class="card search-card">
+        <form method="GET" action="{% url 'note_list' %}" class="search-form">
+            <input
+                type="text"
+                name="q"
+                class="form-control"
+                placeholder="Search your notes by title or content..."
+                value="{{ query }}">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h3>Profile Summary</h3>
+        <ul class="profile-summary-list">
+            <li><strong>Username:</strong> {{ user.username }}</li>
+            <li><strong>Email:</strong> {{ user.email }}</li>
+            <li><strong>Joined:</strong> {{ user.date_joined|date:"F j, Y" }}</li>
+            <li><strong>Total Notes:</strong> {{ notes_count }}</li>
+        </ul>
+        <a href="{% url 'profile' %}" class="btn btn-secondary btn-sm">Edit Profile</a>
+    </div>
+</section>
+{% endblock %}
