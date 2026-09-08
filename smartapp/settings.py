@@ -6,16 +6,21 @@ from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / '.env')  
 
+SECRET_KEY = os.environ.get('SECRET_KEY')
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-change-this-secret-key-in-production'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = []
 
+ALLOWED_HOSTS = ['127.0.0.1','localhost']
+CSRF_TRUSTED_ORIGINS = [
+    'https://127.0.0.1',]
 # Application definition
 
 INSTALLED_APPS = [
@@ -32,6 +37,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -63,17 +69,10 @@ WSGI_APPLICATION = 'smartapp.wsgi.application'
 # Database
 # Using MySQL. Requires: pip install mysqlclient
 
+import dj_database_url
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'smartnote_db',
-        'USER':'root',
-        'PASSWORD': "loli123,sara",
-        'HOST': "127.0.0.1",
-        'PORT':  '3306',
-       
-    }
-}
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'))} 
 
 
 # Password validation
@@ -106,7 +105,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",},
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",},}
 # Media files (user-uploaded profile images)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
