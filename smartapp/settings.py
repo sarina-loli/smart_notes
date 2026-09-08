@@ -18,9 +18,11 @@ DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 # SECURITY WARNING: don't run with debug turned on in production!
 
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','smart-notes-eep6.onrender.com']
 CSRF_TRUSTED_ORIGINS = [
-    'https://127.0.0.1',]
+    'https://127.0.0.1',
+    'https://smart-notes-eep6.onrender.com',
+]
 # Application definition
 
 INSTALLED_APPS = [
